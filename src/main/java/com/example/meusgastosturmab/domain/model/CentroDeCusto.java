@@ -20,7 +20,7 @@ public class CentroDeCusto {
     @Id // joga/cria o codigo como tabela no BD
     @GeneratedValue(strategy = GenerationType.IDENTITY) // gera o id automatico /o banco q cuida e n cria outro igual
     @Column(name = "idCentroDeCusto")
-    private long id;
+    private Long id;
     @Column(nullable = false) //nao pode ser falso
     private String descricao;
     @Column(columnDefinition = "TEXT") //cabe texto longo

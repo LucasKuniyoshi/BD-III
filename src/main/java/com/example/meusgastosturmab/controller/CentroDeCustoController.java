@@ -1,5 +1,7 @@
 package com.example.meusgastosturmab.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,12 @@ public class CentroDeCustoController {
         return ResponseEntity.ok(centroDeCustoService.obterPorId(id));
     }
 
-    @PostMapping("/{id}")
+    @GetMapping
+    public ResponseEntity<List<CentroDeCustoResponseDTO>> obterTodos(){
+        return ResponseEntity.ok(centroDeCustoService.obterTodos());
+    }
+
+    @PostMapping
     public ResponseEntity<CentroDeCustoResponseDTO> cadastrar(@RequestBody CentroDeCustoRequestDTO dto){
         CentroDeCustoResponseDTO centroDeCusto = centroDeCustoService.cadastrar(dto);
         return new ResponseEntity<>(centroDeCusto, HttpStatus.CREATED);
