@@ -1,0 +1,17 @@
+- frame - pagina real;
+- 1 pág de 2kb é melhor q 2 pág de 1kb;
+- procura na TLB(tecnica para agilizar a tabela de mapeamento, deixa em cache a busca) antes de procurar na tabela de mapeamento; se achar na TLB, vai ta na memória principal.
+- Segmentação => Tudo deve estar alocado no mesmo segmento(função, variavel, procedimento...), diferente da paginação.
+Depende do programador, precisa estar modularizado para funcionar!!
+- Paginação => Alocação: best-fit, worst-fit e first-fit;
+
+fifo - Momento em que foi carregada(menor tempo); pag 8.
+
+lfu - Contador(conta quantidades de vezes q o processo foi acessado) / num referencia(menor numero); pag 3.
+
+lru - momento ultimo acesso (menor numero/ linha temporal); pag 1.
+
+nru - opsto do lru (bit de referencia/modificação). Retira os que tem valor zero aleatoriamente => pag 1 ou 10
+
+
+fifo circular - fifo + nru => pega os que tem valor zero e o que tiver menor Momento em que foi carregada será retirada; pag 1.

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PassagemApplication<passagem>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.passagem.PassagemApplication",
+            "projectName": "passagem",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

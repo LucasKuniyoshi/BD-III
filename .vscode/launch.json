@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MeusgastosTurmabApplication<meusgastos-turmab>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.meusgastosturmab.MeusgastosTurmabApplication",
+            "projectName": "meusgastos-turmab",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
