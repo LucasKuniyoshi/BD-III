@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.passagem.domain.dto.Usuario.UsuarioRequestDTO;
 import com.example.passagem.domain.dto.Usuario.UsuarioResponseDTO;
@@ -15,6 +16,7 @@ import com.example.passagem.domain.exception.ResourceNotFoundException;
 import com.example.passagem.domain.model.Usuario;
 import com.example.passagem.domain.repository.UsuarioRepository;
 
+@Service
 public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioResponseDTO> {
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -52,21 +54,31 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioRe
     }
 
     @Override
-    public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {
-        obterPorId(id);
+    public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {// atualizar = salvar
+        UsuarioResponseDTO usuarioBanco = obterPorId(id);//obtem id
         if(dto.getEmail() == null || dto.getSenha() == null){
-            throw new ResourceBadRequestException("Email e Senha são Obrigatórios!");
+            throw new ResourceBadRequestException("Email e Senha sao obrigatorios!");
         }
         Usuario usuario = mapper.map(dto, Usuario.class);
-        usuario.setId(id);
-        usuario = usuarioRepository.save(usuario);
+        usuario.setSenha(dto.getSenha());
+        usuario.setId(id);//altera os dados do usuario desse id, sem precisar criar outro usuario com outro id
+        usuario.setDataCadastro(usuarioBanco.getDataCadastro());
+        usuario.setDataInativacao(usuarioBanco.getDataInativacao());
+        usuario = usuarioRepository.save(usuario);// assim que salva o usuario no banco
         return mapper.map(usuario, UsuarioResponseDTO.class);
     }
 
     @Override
     public void deletar(Long id) {
-        obterPorId(id);
-        usuarioRepository.deleteById(id);
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+        if(optUsuario.isEmpty()){
+            throw new ResourceNotFoundException("Não foi possivel encontrar o usuário com id: " + id);
+        }
+        Usuario usuario = optUsuario.get();
+        usuario.setDataInativacao(new Date());
+        usuarioRepository.save(usuario);
+        //obterPorId(id);
+        //usuarioRepository.deleteById(id);
     }
     
 }
