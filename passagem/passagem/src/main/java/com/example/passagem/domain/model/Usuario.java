@@ -1,5 +1,6 @@
 package com.example.passagem.domain.model;
 
+import java.util.Collection;
 //import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -11,11 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-public class Usuario /*implements UserDetails*/{
+public class Usuario implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idUsuario")
@@ -74,7 +75,7 @@ public class Usuario /*implements UserDetails*/{
     public void setPassagem(List<Passagem> passagem) {
         this.passagem = passagem;
     }
-    /*@Override
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
@@ -108,6 +109,6 @@ public class Usuario /*implements UserDetails*/{
     public boolean isEnabled() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'isEnabled'");
-    }*/
+    }
 
 }
