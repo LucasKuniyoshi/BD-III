@@ -6,6 +6,7 @@ public class UsuarioResponseDTO {
     private Long id;
     private String nome;
     private String email;
+    private String senha;
     private Date dataCadastro;
     private Date dataInativacao;
 
@@ -38,5 +39,11 @@ public class UsuarioResponseDTO {
     }
     public void setDataInativacao(Date dataInativacao) {
         this.dataInativacao = dataInativacao;
+    }
+    public String getSenha() {
+        return senha;
+    }
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

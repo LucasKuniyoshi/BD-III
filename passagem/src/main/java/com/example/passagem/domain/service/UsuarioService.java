@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.passagem.domain.dto.Usuario.UsuarioRequestDTO;
@@ -22,6 +23,9 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioRe
     private UsuarioRepository usuarioRepository;
     @Autowired
     private ModelMapper mapper;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
 
     @Override
     public List<UsuarioResponseDTO> obterTodos() {
@@ -42,31 +46,37 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioRe
     public UsuarioResponseDTO cadastrar(UsuarioRequestDTO dto) {
         if(dto.getEmail() == null || dto.getSenha() == null){
             throw new ResourceBadRequestException("Email e Senha são Obrigatórios!");
-        }
+        }//criar método para não repetir código
         Optional<Usuario> optUsuario = usuarioRepository.findByEmail(dto.getEmail());
         if(optUsuario.isPresent()){
-            throw new ResourceBadRequestException("Já existe um usuário cadastradado com esse email: " + dto.getEmail());
+            throw new ResourceBadRequestException("Já existe um usuário cadastro com esse email: " + dto.getEmail());
         }
         Usuario usuario = mapper.map(dto, Usuario.class);
-        usuario.setDataCadastro(new Date());
+        //encriptografar senha 
+        String senha = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senha);
+        usuario.setId(null);
+        usuario.setDataCadastro(new Date());  
         usuario = usuarioRepository.save(usuario);
         return mapper.map(usuario, UsuarioResponseDTO.class);
     }
 
     @Override
-    public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {// atualizar = salvar
-        UsuarioResponseDTO usuarioBanco = obterPorId(id);//obtem id
-        if(dto.getEmail() == null || dto.getSenha() == null){
-            throw new ResourceBadRequestException("Email e Senha sao obrigatorios!");
+    public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {
+       UsuarioResponseDTO usuarioBanco = obterPorId(id); // se ele não existir o obterPorId vai lançar a exceção
+         if(dto.getEmail() == null || dto.getSenha() == null){
+            throw new ResourceBadRequestException("Email e Senha são Obrigatórios!");
         }
         Usuario usuario = mapper.map(dto, Usuario.class);
+        //cryp senha
         usuario.setSenha(dto.getSenha());
-        usuario.setId(id);//altera os dados do usuario desse id, sem precisar criar outro usuario com outro id
-        usuario.setDataCadastro(usuarioBanco.getDataCadastro());
+        usuario.setId(id);
         usuario.setDataInativacao(usuarioBanco.getDataInativacao());
-        usuario = usuarioRepository.save(usuario);// assim que salva o usuario no banco
+        usuario.setDataCadastro(usuarioBanco.getDataCadastro());
+        usuario = usuarioRepository.save(usuario);
         return mapper.map(usuario, UsuarioResponseDTO.class);
     }
+
 
     @Override
     public void deletar(Long id) {
